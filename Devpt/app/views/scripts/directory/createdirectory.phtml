@@ -1,0 +1,96 @@
+
+<h1><?php echo $this->title ?></h1>
+
+
+<form id="final_form" class="form-horizontal" enctype="multipart/form-data" method="post" action="">
+    <p>
+        <label>Nom : </label>
+        <input type="text" id="name" name="name" value="<?php echo $this->directory ? $this->directory->name : "";?>">
+    </p>
+
+    <input type="hidden" id="parentid" name="parentid" class="tagazog" value="">
+    <p>
+        <label>Parent : </label>
+        <div id="using_html_4" class="demo jstree jstree-6 jstree-default" role="tree" aria-multiselectable="true" tabindex="0" aria-activedescendant="j6_1" aria-busy="false">
+        <?php
+
+        function generateTreeMenu($directories, $parent = 1, $limit=0){
+            if($limit > 1000) return '';
+            $tree = '';
+            $tree = '<ul class="jstree-container-ul jstree-children" role="group">';
+
+            for($i=0, $ni=count($directories); $i < $ni; $i++){
+                if($directories[$i]->parentid == $parent){
+                    $tree .= '<li role=\'treeitem\' class=\'directory\' data-id=\''.$directories[$i]->id.'\'><a>';
+                    $tree .= $directories[$i]->name.'</a>';
+                    $tree .= generateTreeMenu($directories, $directories[$i]->id, $limit++);
+                    $tree .= '</li>';
+                }
+            }
+            $tree .= '</ul>';
+            return $tree;
+        }
+
+        $str =  generateTreeMenu($this->directories);
+        echo $str;
+        ?>
+    </div>
+
+    </p>
+
+    <p>
+        <label>Access :</label>
+        <select name="access" id="access">
+            <?php
+            foreach ($this->roles as $r) {
+                echo "<option value='$r' >$r</option>";
+            }
+            ?>
+        </select>
+    </p>
+
+    <p>
+        <label>Extensions authorisées :</label>
+        <br>
+        <?php
+            foreach ($this->extensions as $ex) {
+                echo "<input type='checkbox' name='extensions[]' value='$ex'>$ex<br>";
+            }
+            ?>
+    </p>
+
+
+    <button id="submit"><?php echo $this->button_title; ?></button>
+</form>
+
+<script>
+
+    $(function () {
+        $('#using_html_4').jstree();
+    });
+
+    $(document).ready(function() {
+
+        let parent_id;
+
+        $("#error_msg_name").hide();
+
+        $(document).on("click",".directory",function(e){
+            parent_id = $(this).data('id');
+            $("#parentid").val(parent_id);
+            e.stopPropagation();
+        });
+
+        $("#submit").click(function (e) {
+            $("#error_msg_name").hide();
+
+            // make check
+            if(!$("#name").val()){
+                $("#error_msg_name").text("Il faut entrer un nom");
+                $("#error_msg_name").show();
+                e.preventDefault();
+            }
+        });
+
+    });
+</script>

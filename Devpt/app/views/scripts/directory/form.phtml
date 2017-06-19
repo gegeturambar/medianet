@@ -1,0 +1,102 @@
+<?php
+//$motifs = $this->motifs;
+$role = $this->user ? $this->user->role : "";
+?>
+<h1><?php echo $this->title ?></h1>
+
+
+    <form id="final_form" class="form-horizontal" enctype="multipart/form-data" method="post">
+        <p>
+            <label>Name : </label>
+            <input type="text" id="name" name="name" value="<?php echo $this->user ? $this->user->name : "";?>">
+        </p>
+        <p>
+            <label>Parent : </label>
+            <input type="password" id="password" name="password" value="">
+        </p>
+        <p>
+            <label>Confirmation : </label>
+            <input type="password" id="password2" name="password2" value="">
+        </p>
+
+        <p>
+            <label>Role : </label>
+            <select id="role" name="role">
+                <?php
+                foreach ($this->roles as $r) {
+                    $selected = $r == $role ? "selected" : "";
+                    echo "<option value='$r' $selected >$r</option>";
+                }
+                ?>
+            </select>
+        </p>
+
+        <button id="submit"><?php echo $this->button_title; ?></button>
+    </form>
+
+<div class="error">
+    <span id="error_msg"></span>
+</div>
+<div class="success">
+    <span id="success_msg"></span>
+</div>
+<script>
+
+    $(document).ready(function() {
+
+        $("#submit").click(function(e){
+
+            $('#error_msg').hide();
+            let name = $("#name").val();
+            let pswd = $("#password").val();
+            let pswd2 = $("#password2").val();
+
+            if(pswd != pswd2){
+                $('#error_msg').text("Les mots de passe ne correspondent pas");
+                $('#error_msg').show();
+                return;
+            }
+
+            let data = {
+                'name':name
+            };
+
+            <?php
+
+            if(!$this->user) {
+                echo "data.password = pswd;";
+            }else {
+                $script = "
+                data.id = ".$this->user->id.";
+                if(pswd){
+                    data.password = pswd;
+                }";
+                echo  $script;
+            }
+            ?>
+
+            data.role = $("#role").val();
+            jQuery.ajax({
+                url: '<?php echo $this->urlAjax; ?>',
+                data: data,
+                type: 'POST',
+                success: function(data){
+                    console.log(data);
+                    if(data.error){
+                        $('#error_msg').text(data.error_msg);
+                        $('#error_msg').show();
+                    }else{
+                        $('#success_msg').text("<?php echo $this->msg_success; ?>");
+                        <?php if(!$this->user){ ?>
+                        $('#name').val("");
+                        $('#password').val("");
+                        $('#password2').val("");
+                        <?php } ?>
+                        $("#success").show();
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+    });
+</script>

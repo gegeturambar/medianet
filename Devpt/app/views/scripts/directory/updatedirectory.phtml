@@ -1,0 +1,107 @@
+
+<h1><?php echo $this->title ?></h1>
+
+
+<form id="final_form" class="form-horizontal" enctype="multipart/form-data" method="post" action="">
+    <p>
+        <label>Nom : </label>
+        <input type="text" id="name" name="name" value="<?php echo $this->directory ? $this->directory->name : "";?>">
+    </p>
+
+    <input type="hidden" id="id" name="id" value="<?php echo $this->directory->id;?>">
+    <input type="hidden" id="parentid" name="parentid" value="<?php echo $this->directory->parentid; ?>">
+    <p>
+        <label>Parent : </label>
+    <div id="directory_tree" class="demo jstree jstree-6 jstree-default" role="tree" aria-multiselectable="true" tabindex="0" aria-activedescendant="j6_1" aria-busy="false">
+        <?php
+
+        function generateTreeMenu($current_directory,$directories, $parent = 1, $limit=0){
+            if($limit > 1000) return '';
+            $tree = '';
+            $tree = '<ul class="jstree-container-ul jstree-children" role="group">';
+
+            for($i=0, $ni=count($directories); $i < $ni; $i++){
+                if($directories[$i]->parentid == $parent){
+                    $tree .= '<li role=\'treeitem\' class=\'directory\' id=\'directory_'.$directories[$i]->id.'\' data-id=\''.$directories[$i]->id.'\'>';
+
+                    $class = $current_directory->parentid == $directories[$i]->id ? "jstree-clicked " : "";
+                    $tree .= "<a class=\"$class\">".$directories[$i]->name.'</a>';
+                    $tree .= generateTreeMenu($current_directory,$directories, $directories[$i]->id, $limit++);
+                    $tree .= '</li>';
+                }
+            }
+            $tree .= '</ul>';
+            return $tree;
+        }
+
+        $str =  generateTreeMenu($this->directory,$this->directories);
+        echo $str;
+        ?>
+    </div>
+
+    </p>
+
+    <p>
+        <label>Access :</label>
+        <select name="access" id="access">
+            <?php
+            foreach ($this->roles as $r) {
+                $selected = $r == $this->directory->access ? 'selected' : "";
+                echo "<option value='$r' $selected >$r</option>";
+            }
+            ?>
+        </select>
+    </p>
+
+    <p>
+        <label>Extensions authorisées :</label>
+        <br>
+        <?php
+        $directories_extensions = explode(',',$this->directory->extensions);
+
+        foreach ($this->extensions as $ex) {
+            $selected = in_array($ex,$directories_extensions) ? 'checked' : "";
+
+            echo "<input type='checkbox' name='extensions[]' value='$ex' $selected >$ex<br>";
+        }
+        ?>
+    </p>
+
+
+    <button id="submit"><?php echo $this->button_title; ?></button>
+</form>
+
+<script>
+
+    $(function () {
+        $('#directory_tree').jstree();
+        let parentid = 'directory_<?php echo $this->directory->parentid;?>_anchor';
+        console.log($("#"+parentid).length);
+        $('#directory_tree').jstree('select_node', parentid);
+    });
+
+    $(document).ready(function() {
+
+        let parent_id;
+
+        $("#error_msg_name").hide();
+
+        $(document).on("click",".directory",function(e){
+            parent_id = $(this).data('id');
+            $("#parentid").val(parent_id);
+            e.stopPropagation();
+        });
+
+        $("#submit").click(function (e) {
+            $("#error_msg_name").hide();
+
+            // make check
+            if(!$("#name").val()){
+                $("#error_msg_name").text("Il faut entrer un nom");
+                $("#error_msg_name").show();
+                e.preventDefault();
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,165 @@
+<?php
+$motifs = $this->motifs;
+?>
+<h1>Formulaire d'upload</h1>
+
+
+    <h3>Formulaire : </h3>
+
+    <div class="mb-10" id="message_send"></div>
+    <div>
+        <p id="phrase_retour"></p>
+        <p id="pieces_jointes"></p>
+    </div>
+    <form id="final_form" class="form-horizontal" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="demande">Demande :</label>
+            <!--<textarea class="form-control" rows="5" id="demande"></textarea>-->
+							<div id="using_html_4" class="demo jstree jstree-6 jstree-default" role="tree" aria-multiselectable="true" tabindex="0" aria-activedescendant="j6_1" aria-busy="false">
+                                <?php
+
+                                function generateTreeMenu($directories, $parent = 1, $limit=0){
+                                    if($limit > 1000) return '';
+                                    $tree = '';
+                                    $tree = '<ul class="jstree-container-ul jstree-children" role="group">';
+
+                                    for($i=0, $ni=count($directories); $i < $ni; $i++){
+                                        if($directories[$i]->parentid == $parent){
+                                            $tree .= '<li role=\'treeitem\' class=\'directory\' data-id=\''.$directories[$i]->id.'\'><a>';
+                                            $tree .= $directories[$i]->name.'</a>';
+                                            $tree .= generateTreeMenu($directories, $directories[$i]->id, $limit++);
+                                            $tree .= '</li>';
+                                        }
+                                    }
+                                    $tree .= '</ul>';
+                                    return $tree;
+                                }
+
+                                $str =  generateTreeMenu($this->directories);
+                                echo $str;
+?>
+                            </div>
+			
+			
+        </div>
+        <button type="button" class="btn btn-primary pull-right sendData"><?php echo ENVOYER_FORM;?></button>
+        <div class="col-10 uploadcol">
+            <div class="upload error text-danger mb-5"></div>
+        </div>
+        <div class="input_fields_wrap">
+            <button class="add_field_button btn btn-info mb-10"><?php echo UPLOAD_FORM;?></button>
+        </div>
+
+    </form>
+
+
+<script>
+    /*ajouter autant de fichier à uploader que l'on souhaite*/
+    $(document).ready(function() {
+        var max_fields      = 7; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+        var add_button      = $(".add_field_button"); //Add button ID
+
+        let directory_id = null;
+
+        $(document).on("click",".directory",function(e){
+            directory_id = $(this).data('id');
+            e.stopPropagation();
+        });
+
+        var x = 1; //initlal text box count
+        $(add_button).click(function(e){ //on add input button click
+            e.preventDefault();
+            /*
+            // get directory clicked and add it
+            let directories = $('#final_form').data('directories');
+            if(directories === undefined)
+                directories = [];
+            directories.push(directory_id);
+            $('#final_form').data('directories',directories);
+*/
+
+            if(x < max_fields){ //max input box allowed
+                x++; //text box increment
+                $(wrapper).append('<div class="form-group"><input  data-directory="'+directory_id+'" type="file" name="myfile[]" class="fileUpload"/><a href="#" class="remove_field"><?php echo SUPPRIMER_FORM;?></a></div>'); //add input box
+            }
+        });
+
+        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+		
+    });	
+	
+    /*envoi final du formulaire en ajax*/
+    $('.sendData').on( "click", function() {
+
+        var data = new FormData($('#final_form')[0]);
+
+        var message= $('#demande').val();
+        data.append('message', message);
+
+        let directories = [];
+        jQuery.each($('#final_form').find(".fileUpload"),function(key,value){
+            let val = jQuery(value).data('directory');
+            directories.push(val);
+        });
+        // get directories from html data
+        //let directories = $('#final_form').data('directories');
+        console.log(directories);
+        data.append('directories',directories);
+
+        jQuery.ajax({
+            url: 'envoiformulaire',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            type: 'POST',
+            success: function(data){
+                //var retour = jQuery.parseJSON(data);
+                var retour = data;
+                var error = retour[0];
+                var files = retour[1];
+                var phrase_retour = retour[2];
+
+                if(error!='') {
+                    $('.upload.error.text-danger').html(error);
+                    $('.uploadcol').addClass('has-error');
+                }else{
+                    $('.formulaire .alert-success').removeClass('hide');
+                    //$('#final_form').addClass('hide');
+                    $('.upload.error.text-danger').html('');
+                    $('.uploadcol').removeClass('has-error');
+                    $('#final_form')[0].reset();
+                    $('#phrase_retour').html('<strong>'+phrase_retour+'</strong>');
+                     // var demande = $('#demande').val();
+                    // $('#phrase_retour').html('<strong>'+phrase_retour+'</strong>');
+                    // $('#pieces_jointes').html(files);
+                    // $('.formulaire .alert-success').removeClass('hide');
+                    // $('#final_form').addClass('hide');
+                    // $('.upload.error.text-danger').html('');
+                    // $('.uploadcol').removeClass('has-error');
+                    // $('#message_send').html(demande.nl2br());
+                }
+            }
+        });
+
+
+    })
+
+
+    String.prototype.nl2br = function()
+    {
+        return this.replace(/(\r\n|\n\r|\r|\n)/g, "<br>");
+    }
+	
+</script>
+
+<script>
+	$(function () {
+		$('#using_html_4').jstree();
+	});
+</script>
+

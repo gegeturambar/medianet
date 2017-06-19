@@ -1,0 +1,71 @@
+<?php
+//$motifs = $this->motifs;
+?>
+<h1><?php echo $this->title;?></h1>
+
+
+    <h3>Liste des répertoires : </h3>
+
+    <div class="row popover-content">
+        <div class="col-xs-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>parent</th>
+                        <th>access</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach($this->directories as $dir){
+                        //var_dump($dir);die();
+                        $st .= "<tr><td><a href='/updatedirectory?id=$dir->id'>$dir->name</a></td>";
+                        if($dir->parentid == 1 ){
+                            $st .= "<td>$dir->parentname</td>";
+                        }else {
+                            $st .= "<td><a href='/updatedirectory?id=$dir->parentid'>$dir->parentname</a></td>";
+                        }
+                        $st .= "<td>$dir->access</td><td><i data-id='$dir->id' class=\"icon-remove-sign delete\"></i></td></tr>";
+                    }
+                    echo $st;
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+
+    $(document).ready(function() {
+
+        $('.delete').click(function(e){
+           //get id
+
+            let elemToRemove = jQuery(e.target).closest("tr");
+            let id = jQuery(e.target).data('id');
+
+            jQuery.ajax({
+                url: '/deletedirectoryajax',
+                data: {'id':id},
+                type: 'POST',
+                success: function(data){
+                    console.log(data);
+                    if(data.error){
+                        $('#error_msg').text(data.error_msg);
+                        $('#error_msg').show();
+                    }else{
+                        elemToRemove.remove();
+                        $('#success_msg').text("Répertoire supprimé");
+                        $("#success").show();
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+    });
+
+
+</script>
+

@@ -1,0 +1,39 @@
+
+    <table class="table table-striped" width="647">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Titre</th>
+            <th>Image</th>
+            <th>Catégories</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Date de sortie</th>
+            <th>Supprimer</th>
+            <th>Editer</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($this->films as $film) {
+            ?>
+            <tr>
+                <td><?php echo $film->id;?></td>
+                <td><a href="film?id=<?php echo $film->id;?>"><?php echo $film->titre;?></a></td>
+                <td><img width=150 height=150 src="<?php echo WEB_ROOT; ?>/images/film/<?php echo $film->image;?>"/> </td>
+                <td><?php foreach($this->categs[$film->id] as $categ)
+                        echo   $categ->nom.'<br/>';
+                    ?>
+                </td>
+                <td><?php echo substr($film->description, 0, 100).'...';?></td>
+                <td><?php echo $film->prix;?></td>
+                <td><?php $date = new DateTime($film->date_sortie);
+                    echo $date->format('d/m/Y'); ?></td>
+                <td><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ce film ?')" href="?iddelete=<?php echo $film->id;?>"><span class="glyphicon glyphicon-trash"></span></a></td>
+                <td><a href="<?php echo WEB_ROOT; ?>/add/film?id=<?php echo $film->id;?>" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Editer </a></td>
+            </tr>
+            <?php
+        }
+        ?>
+        </tbody>
+    </table>
+    </div>

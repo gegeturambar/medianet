@@ -1,0 +1,59 @@
+<br>
+
+<?php
+if($this->error){
+    ?>
+    <div id="error" class="error">
+        <p id="error_msg" class="error_msg">
+            <?php echo $this->error_msg; ?>
+        </p>
+    </div>
+<?php
+}
+?>
+
+<form class="form-signin" enctype="multipart/form-data" method="post" action="forgotpassword">
+    <label class="control-label">E-mail</label>
+    <div class="form-group">
+        <input type="text" id="email" class="form-control" name="email" placeholder="Saisir votre adresse e-mail" value="">
+        <span id="mail_required">Le mail dot être renseigné</span>
+        <span id="helpBlock1" class="help-block"></span>
+    </div>
+    <button type="submit" class="btn btn-lg btn-warning btn-block">Envoyer</button>
+</form>
+
+<script>
+
+    $(document).ready(function() {
+        $("#mail_required").hide();
+        // check if mail send or no
+        $('.btn').click(function(e){
+            //get id
+            $("#mail_required").hide();
+            let email = $("#email").val();
+            if(!email){
+                $("#mail_required").show();
+            }
+
+            let elem = jQuery(e.target).closest("tr");
+            let id = jQuery(e.target).data('id');
+
+            jQuery.ajax({
+                url: '/forgotpasswordmail',
+                data: {'email':email},
+                type: 'POST',
+                success: function(data){
+                    console.log(data);
+                    if(data.error){
+                        $('#error_msg').text(data.error_msg);
+                        $('#error_msg').show();
+                    }else{
+                        window.location = "/";
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+
+    });
+</script>

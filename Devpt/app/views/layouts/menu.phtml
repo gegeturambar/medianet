@@ -1,0 +1,24 @@
+<?php if(Utils::getCurrentUser()) {
+    ?>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="<?php echo WEB_ROOT; ?>/formulaire">Formulaire d'upload</a>
+                <?php
+                if (Utils::getCurrentUser()->role === "ADMIN") {
+                    ?>
+                    <a class="navbar-brand" href="<?php echo WEB_ROOT; ?>/listuser">Liste des utilisateurs</a>
+                    <a class="navbar-brand" href="<?php echo WEB_ROOT; ?>/createuser">Ajouter un utilisateur</a>
+                    <a class="navbar-brand" href="<?php echo WEB_ROOT; ?>/listdirectory">Liste des répertoires</a>
+                    <a class="navbar-brand" href="<?php echo WEB_ROOT; ?>/createdirectory">Ajouter un répertoire</a>
+                    <?php
+                }
+                ?>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+    <?php
+}
+?>

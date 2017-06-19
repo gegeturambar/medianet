@@ -1,0 +1,63 @@
+<?php
+//$motifs = $this->motifs;
+?>
+<h1><?php echo $this->title;?></h1>
+
+
+    <h3>Liste des utilisateurs : </h3>
+
+    <div class="row popover-content">
+        <div class="col-xs-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Mail</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach($this->users as $us){
+                        $st .= "<tr><td><a href='/updateuser?id=$us->id'>$us->mail</a></td>";
+                        $st .= "<td>$us->role</td><td><i data-id='$us->id' class=\"icon-remove-sign delete\"></i></td></tr>";
+                    }
+                    echo $st;
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+
+    $(document).ready(function() {
+        $('.delete').click(function(e){
+           //get id
+
+            let elemToRemove = jQuery(e.target).closest("tr");
+            let id = jQuery(e.target).data('id');
+
+            jQuery.ajax({
+                url: '/deleteuserajax',
+                data: {'id':id},
+                type: 'POST',
+                success: function(data){
+                    console.log(data);
+                    if(data.error){
+                        $('#error_msg').text(data.error_msg);
+                        $('#error_msg').show();
+                    }else{
+                        elemToRemove.remove();
+                        $('#success_msg').text("Utilisateur supprimé");
+                        $("#success").show();
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+    });	
+	
+
+</script>
+

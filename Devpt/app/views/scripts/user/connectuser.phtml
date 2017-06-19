@@ -1,0 +1,36 @@
+
+<?php
+if($this->error){
+    ?>
+    <div id="error" class="error">
+        <p id="error_msg" class="error_msg">
+            <?php echo $this->error_msg; ?>
+        </p>
+    </div>
+    <?php
+}
+?>
+
+<form id="final_form" class=" form-signin" enctype="multipart/form-data" method="post" action="/connectuser">
+    <label class="control-label">Mail</label>
+    <div class="form-group">
+        <input type="text" id="mail" name="mail" class="form-control" >
+        <span id="helpBlock2" class="help-block"></span>
+    </div>
+    <label>Password</label>
+    <div class="form-group">
+        <input type="password" id="password" name="password" class="form-control" >
+        <span id="helpBlock2" class="help-block"></span>
+
+        <a class="password-forgotten" href="/forgotpassword"><em>J'ai oublié mon mot de passe</em></a>
+    </div>
+    <div class="error">
+        <span id="error_msg"></span>
+    </div>
+
+    <div class="success">
+        <span id="success_msg"></span>
+    </div>
+
+    <button class="btn btn-lg btn-warning btn-block" type="submit" id="submit"><?php echo $this->button_title; ?></button>
+</form>
