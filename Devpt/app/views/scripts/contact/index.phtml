@@ -42,28 +42,48 @@ $motifs = $this->motifs;
 			
 			
         </div>
-        <button type="button" class="btn btn-primary pull-right sendData"><?php echo ENVOYER_FORM;?></button>
+        <button type="button" id="sendData" class="btn btn-primary pull-right sendData" style="display: none"><?php echo "Upload";?></button>
         <div class="col-10 uploadcol">
             <div class="upload error text-danger mb-5"></div>
         </div>
         <div class="input_fields_wrap">
-            <button class="add_field_button btn btn-info mb-10"><?php echo UPLOAD_FORM;?></button>
+            <span class="btn btn-info mb-10" id="avert"><?php echo "Veuillez sélectionnez un répertoire";?></span>
+            <button class="add_field_button btn btn-info mb-10" id="firstadd" style="display: none" ><?php echo "Ajouter un fichier";?></button>
         </div>
 
     </form>
 
 
 <script>
+    var Upload = {};
+    Upload.directory_id = undefined;
+    Upload.directory_name = undefined;
+
     /*ajouter autant de fichier à uploader que l'on souhaite*/
     $(document).ready(function() {
         var max_fields      = 7; //maximum input boxes allowed
         var wrapper         = $(".input_fields_wrap"); //Fields wrapper
         var add_button      = $(".add_field_button"); //Add button ID
 
-        let directory_id = null;
+        Upload.directory_id = undefined;
+        Upload.directory_name = undefined;
 
         $(document).on("click",".directory",function(e){
-            directory_id = $(this).data('id');
+            Upload.directory_id = $(this).data('id');
+            Upload.directory_name = $(this).text();
+            console.log(Upload.directory_name);
+            // get last button add
+            $(".input_fields_wrap .add_field_button").last().text("Ajouter un fichier au répertoire "+Upload.directory_name);
+
+            // show button if hidden
+            if($("#avert").is(':visible'))
+                $("#avert").hide();
+            if(!$("#firstadd").is(':visible'))
+                $("#firstadd").show();
+            if(!$("#sendData").is(':visible'))
+                $("#sendData").show();
+
+
             e.stopPropagation();
         });
 
@@ -81,7 +101,7 @@ $motifs = $this->motifs;
 
             if(x < max_fields){ //max input box allowed
                 x++; //text box increment
-                $(wrapper).append('<div class="form-group"><input  data-directory="'+directory_id+'" type="file" name="myfile[]" class="fileUpload"/><a href="#" class="remove_field"><?php echo SUPPRIMER_FORM;?></a></div>'); //add input box
+                $(wrapper).append('<div class="form-group"><input  data-directory="'+Upload.directory_id+'" type="file" name="myfile[]" class="fileUpload"/><a href="#" class="remove_field"><?php echo SUPPRIMER_FORM;?></a></div>'); //add input box
             }
         });
 
