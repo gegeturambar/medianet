@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a3c52b81-3c76-4a32-b2cc-a23d5a3240f4" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/medianet.sql" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/controllers/AjaxController.php" afterPath="$PROJECT_DIR$/Devpt/app/controllers/AjaxController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/controllers/DirectoryController.php" afterPath="$PROJECT_DIR$/Devpt/app/controllers/DirectoryController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/controllers/UserController.php" afterPath="$PROJECT_DIR$/Devpt/app/controllers/UserController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/views/layouts/layout.phtml" afterPath="$PROJECT_DIR$/Devpt/app/views/layouts/layout.phtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/views/scripts/contact/index.phtml" afterPath="$PROJECT_DIR$/Devpt/app/views/scripts/contact/index.phtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/views/scripts/directory/createdirectory.phtml" afterPath="$PROJECT_DIR$/Devpt/app/views/scripts/directory/createdirectory.phtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/app/views/scripts/directory/updatedirectory.phtml" afterPath="$PROJECT_DIR$/Devpt/app/views/scripts/directory/updatedirectory.phtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/config/settings.ini" afterPath="$PROJECT_DIR$/Devpt/config/settings.ini" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/web/import.php" afterPath="$PROJECT_DIR$/Devpt/web/import.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Devpt/web/javascripts/utils.js" afterPath="$PROJECT_DIR$/Devpt/web/javascripts/utils.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -96,29 +87,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="updatedirectory.phtml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Devpt/app/views/scripts/directory/updatedirectory.phtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="562">
-              <caret line="124" column="13" lean-forward="false" selection-start-line="124" selection-start-column="13" selection-end-line="124" selection-end-column="13" />
-              <folding>
-                <marker date="1497951031110" expanded="true" signature="506:544" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="1238:1587" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="1357:1437" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="1819:1873" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="1819:2017" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="1894:2017" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="2164:2282" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="2164:2439" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="2164:2461" ph="..." />
-                <marker date="1497951031110" expanded="true" signature="2781:2793" ph="{...}" />
-                <marker date="1497951031110" expanded="true" signature="2781:3018" ph="{...}" />
-                <marker date="1497951031110" expanded="true" signature="3055:3092" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Model.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Devpt/lib/base/Model.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -149,11 +117,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Devpt/app/controllers/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="517">
               <caret line="73" column="36" lean-forward="false" selection-start-line="73" selection-start-column="36" selection-end-line="73" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="medianet.sql" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/medianet.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -311,20 +289,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="medianet" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="medianet" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="medianet" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="upload" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -516,11 +480,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Inetpub\WWWRoot\medianet" />
       <recent name="D:\Inetpub\WWWRoot\medianet\Devpt\web\javascripts" />
       <recent name="D:\Inetpub\WWWRoot\medianet\Devpt\app\controllers" />
       <recent name="D:\Inetpub\WWWRoot\medianet\Devpt\app\models" />
       <recent name="D:\Inetpub\WWWRoot\medianet\Devpt\web" />
-      <recent name="D:\Inetpub\WWWRoot\medianet\Devpt\app\views\scripts\directory" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Inetpub\WWWRoot\medianet\src\1\1-1" />
@@ -603,7 +567,7 @@
       <workItem from="1497251032283" duration="10613000" />
       <workItem from="1497266863607" duration="5216000" />
       <workItem from="1497274712256" duration="62105000" />
-      <workItem from="1497511337111" duration="66643000" />
+      <workItem from="1497511337111" duration="66868000" />
     </task>
     <task id="LOCAL-00001" summary="first commit and push">
       <created>1497946290753</created>
@@ -612,11 +576,18 @@
       <option name="project" value="LOCAL" />
       <updated>1497946290753</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="second commit and push">
+      <created>1497973666063</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1497973666063</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="172446000" />
+    <option name="totallyTimeSpent" value="172671000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -677,20 +648,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit and push" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit and push" />
+    <MESSAGE value="second commit and push" />
+    <option name="LAST_COMMIT_MESSAGE" value="second commit and push" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Devpt/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Devpt/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1273,6 +1238,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="517">
           <caret line="73" column="36" lean-forward="false" selection-start-line="73" selection-start-column="36" selection-end-line="73" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/medianet.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
