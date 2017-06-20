@@ -59,6 +59,17 @@ $motifs = $this->motifs;
     Upload.directory_id = undefined;
     Upload.directory_name = undefined;
 
+    function initUploadDir(){
+        $("#avert").show();
+        $("#firstadd").hide();
+        $("#sendData").hide();
+        $(".input_fields_wrap div.form-group").remove();
+        $('#using_html_4 .jstree-clicked').removeClass("jstree-clicked");
+        Upload.uploadCount = 1;
+        Upload.directory_id = undefined;
+        Upload.directory_name = undefined;
+    }
+
     /*ajouter autant de fichier à uploader que l'on souhaite*/
     $(document).ready(function() {
         var max_fields      = 7; //maximum input boxes allowed
@@ -67,6 +78,7 @@ $motifs = $this->motifs;
 
         Upload.directory_id = undefined;
         Upload.directory_name = undefined;
+        Upload.uploadCount = 1;
 
         $(document).on("click",".directory",function(e){
             Upload.directory_id = $(this).data('id');
@@ -87,7 +99,6 @@ $motifs = $this->motifs;
             e.stopPropagation();
         });
 
-        var x = 1; //initlal text box count
         $(add_button).click(function(e){ //on add input button click
             e.preventDefault();
             /*
@@ -99,75 +110,90 @@ $motifs = $this->motifs;
             $('#final_form').data('directories',directories);
 */
 
-            if(x < max_fields){ //max input box allowed
-                x++; //text box increment
+            if(Upload.uploadCount < max_fields){ //max input box allowed
+                Upload.uploadCount++; //text box increment
                 $(wrapper).append('<div class="form-group"><input  data-directory="'+Upload.directory_id+'" type="file" name="myfile[]" class="fileUpload"/><a href="#" class="remove_field"><?php echo SUPPRIMER_FORM;?></a></div>'); //add input box
             }
         });
 
         $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-            e.preventDefault(); $(this).parent('div').remove(); x--;
+            e.preventDefault(); $(this).parent('div').remove(); Upload.uploadCount--;
         })
-		
-    });	
-	
-    /*envoi final du formulaire en ajax*/
-    $('.sendData').on( "click", function() {
 
-        var data = new FormData($('#final_form')[0]);
-
-        var message= $('#demande').val();
-        data.append('message', message);
-
-        let directories = [];
-        jQuery.each($('#final_form').find(".fileUpload"),function(key,value){
-            let val = jQuery(value).data('directory');
-            directories.push(val);
-        });
-        // get directories from html data
-        //let directories = $('#final_form').data('directories');
-        console.log(directories);
-        data.append('directories',directories);
-
-        jQuery.ajax({
-            url: 'envoiformulaire',
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            dataType: 'json',
-            type: 'POST',
-            success: function(data){
-                //var retour = jQuery.parseJSON(data);
-                var retour = data;
-                var error = retour[0];
-                var files = retour[1];
-                var phrase_retour = retour[2];
-
-                if(error!='') {
-                    $('.upload.error.text-danger').html(error);
-                    $('.uploadcol').addClass('has-error');
-                }else{
-                    $('.formulaire .alert-success').removeClass('hide');
-                    //$('#final_form').addClass('hide');
-                    $('.upload.error.text-danger').html('');
-                    $('.uploadcol').removeClass('has-error');
-                    $('#final_form')[0].reset();
-                    $('#phrase_retour').html('<strong>'+phrase_retour+'</strong>');
-                     // var demande = $('#demande').val();
-                    // $('#phrase_retour').html('<strong>'+phrase_retour+'</strong>');
-                    // $('#pieces_jointes').html(files);
-                    // $('.formulaire .alert-success').removeClass('hide');
-                    // $('#final_form').addClass('hide');
-                    // $('.upload.error.text-danger').html('');
-                    // $('.uploadcol').removeClass('has-error');
-                    // $('#message_send').html(demande.nl2br());
-                }
+        $(".input_fields_wrap").on("change",".fileUpload",function(){
+            var filename = $(this)[0].files[0].name;
+            var regex = /^[a-zA-Z]+\.[a-zA-Z]+$/;
+            res = regex.test(filename);
+            if(!res) {
+                $(this).val("");
+                // remove the select
+                Utils.showMsg("Fichier mal nommé, veuillez en sélectionner un autre", "fail");
             }
+            //check file
         });
 
 
-    })
+        /*envoi final du formulaire en ajax*/
+        $('.sendData').on( "click", function() {
+
+            var data = new FormData($('#final_form')[0]);
+
+            var message= $('#demande').val();
+            data.append('message', message);
+
+            let directories = [];
+            jQuery.each($('#final_form').find(".fileUpload"),function(key,value){
+                let val = jQuery(value).data('directory');
+                directories.push(val);
+            });
+            // get directories from html data
+            //let directories = $('#final_form').data('directories');
+            console.log(directories);
+            data.append('directories',directories);
+
+            jQuery.ajax({
+                url: 'envoiformulaire',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                type: 'POST',
+                success: function(data){
+                    //var retour = jQuery.parseJSON(data);
+                    var retour = data;
+                    var error = retour[0];
+                    var files = retour[1];
+                    var phrase_retour = retour[2];
+
+                    if(error!='') {
+                        $('.upload.error.text-danger').html(error);
+                        $('.uploadcol').addClass('has-error');
+                    }else{
+                        initUploadDir();
+                        Utils.hideAllMsg();
+                        Utils.showMsg(phrase_retour,"success",true);
+                        //$('.formulaire .alert-success').removeClass('hide');
+                        //$('#final_form').addClass('hide');
+                        //$('.upload.error.text-danger').html('');
+                        //$('.uploadcol').removeClass('has-error');
+
+                        //$('#final_form')[0].reset();
+                        //$('#phrase_retour').html('<strong>'+phrase_retour+'</strong>');
+                        // var demande = $('#demande').val();
+                        // $('#phrase_retour').html('<strong>'+phrase_retour+'</strong>');
+                        // $('#pieces_jointes').html(files);
+                        // $('.formulaire .alert-success').removeClass('hide');
+                        // $('#final_form').addClass('hide');
+                        // $('.upload.error.text-danger').html('');
+                        // $('.uploadcol').removeClass('has-error');
+                        // $('#message_send').html(demande.nl2br());
+                    }
+                }
+            });
+        })
+
+    });
 
 
     String.prototype.nl2br = function()

@@ -69,11 +69,26 @@
         $('#using_html_4').jstree();
     });
 
+    function checkName(name){
+        var regex = /^[a-zA-Z]+$/;
+        return regex.test(name);
+    }
+
     $(document).ready(function() {
 
         let parent_id;
 
         $("#error_msg_name").hide();
+
+        $("#name").change(function(){
+            var name = $(this).val();
+            if(!checkName(name)) {
+                $(this).val("");
+                // remove the select
+                Utils.showMsg("Répertoire mal nommé, veuillez écrire un autre nom", "fail");
+            }
+        });
+
 
         $(document).on("click",".directory",function(e){
             parent_id = $(this).data('id');
@@ -85,11 +100,21 @@
             $("#error_msg_name").hide();
 
             // make check
-            if(!$("#name").val()){
-                $("#error_msg_name").text("Il faut entrer un nom");
-                $("#error_msg_name").show();
+            var name = $("#name").val();
+            if(!name){
+                Utils.showMsg("Il faut entrer un nom", "fail");
+                //$("#error_msg_name").text("Il faut entrer un nom");
+                //$("#error_msg_name").show();
                 e.preventDefault();
             }
+
+            if(!checkName(name)) {
+                $("#name").val("");
+                // remove the select
+                Utils.showMsg("Répertoire mal nommé, veuillez écrire un autre nom", "fail");
+                e.preventDefault();
+            }
+
         });
 
     });

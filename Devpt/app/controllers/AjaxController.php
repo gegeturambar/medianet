@@ -6,6 +6,8 @@
  */
 class AjaxController extends Controller
 {
+    const ERROR_UPLOAD_FORM_PATTERN = "le nom de ce fichier ( %s ) n'est pas valide";
+
     public function connectuserAction(){
 
         $dbh = Utils::getDbo();
@@ -90,6 +92,12 @@ class AjaxController extends Controller
 
             $directoryModel   = new Directories();
 
+            $datetime = new DateTime();
+            if(date('H') > Utils::getConf()['import']['hourjob']) {
+                $datetime->modify('+1 day');
+            }
+            $date = $datetime->format('Y-m-d');
+            $msgRet = "<span>Les fichiers seront accessibles sur les urls suivantes le $date => </span><ul>";
             for ($i = 0; $i < $count; $i++) {
 
                 if ($_FILES['myfile']['name'][$i] == '') continue;
@@ -97,12 +105,16 @@ class AjaxController extends Controller
                 // get directory
                 $titleImg = $_FILES['myfile']['name'][$i];
 
+                $pattern = '/^[a-zA-Z]+\.[a-zA-Z]+$/';
+                if(!preg_match($pattern,$titleImg)){
+                    $error .= sprintf(ERROR_UPLOAD_FORM_PATTERN, $titleImg).'<br/>';
+                }
                 $extension_upload = strtolower(substr(strrchr($titleImg, '.'), 1));
 
                 $titleImg_only = Utils::generateSlug(substr($titleImg,0,strrpos($titleImg,'.')));
 
                 $format = Utils::getConf()['import']['fileformat'];
-                $titleImg_only = date($format);
+                $titleImg_only .= '_'.date($format);
                 $titleImg = $titleImg_only . '.'.$extension_upload;
                 $directory = $directories[$i];
 
@@ -138,20 +150,24 @@ class AjaxController extends Controller
                     $type = $_FILES['myfile']['type'][$i];
                     $data = array('path'=>$path_dest,'size'=>$size,'type'=> $type,'userid'=> Utils::getCurrentUser()->id,'timestamp'=>date(Utils::getConf()['import']['dateformat']));
                     $ret = $demandeModel->save($data);
-
-                    $realCount = $ret ? $realCount : ( $realCount + 1 );
+                    $msgRet .= $ret ? "<li>$path_dest</li>" : "";
+                    $realCount = $ret ? ( $realCount + 1 ) :  $realCount ;
                 }
             }
+            $msgRet .= "</ul>";
         }
 
             $retour[] =$error;
             $retour[] =$name_files;
-			
+
 
             //$count = $count +$realCount;
 			//$retour[] =   sprintf(NOMBRE_FORM_UPLOAD, $count);
-            if($realCount>0)
-                $retour[] = "Vous avez uploadé $realCount fichiers";
+            if($realCount>0) {
+                $date =
+                $text =  "";
+                $retour[] = $msgRet;
+            }
             else
                 $retour[] = AUCUN_FORM_UPLOAD;
 

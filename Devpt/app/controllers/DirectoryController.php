@@ -6,6 +6,8 @@
  */
 class DirectoryController extends Controller
 {
+    const BADNAME_MSG = "Le nom de ce répertoire n'est pas valide";
+
     public function __construct()
     {
     }
@@ -18,12 +20,21 @@ class DirectoryController extends Controller
         $this->view->title = "Gestion des répertoires";
     }
 
+    protected function checkDirectoryName($name){
+        $pattern = '/^[a-zA-Z]+$/';
+        return preg_match($pattern,$name);
+    }
+
     public function createdirectoryAction(){
         Utils::checkAdminAccess();
         //die('io');
         if($this->_getParam("name")){
-            $this->createdirectory();
-            header('Location:http://'.$_SERVER['HTTP_HOST'].'/listdirectory');
+            if(!$this->checkDirectoryName($this->_getParam("name"))) {
+                Utils::addMsg(self::BADNAME_MSG, Utils::FAIL_MSG);
+            }else {
+                $this->createdirectory();
+                header('Location:http://' . $_SERVER['HTTP_HOST'] . '/listdirectory');
+            }
         }
         $this->view->title = "Créer un répertoire";
         $this->view->button_title = "Créer le répertoire";
@@ -45,9 +56,13 @@ class DirectoryController extends Controller
             throw new Exception("directory with id $id does not exists");
 
         if($this->_getParam("name")){
-            $ret = $this->updateDirectory($directory);
-            if($ret['error'])
-                Utils::addMsg($ret['error_msg'],Utils::FAIL_MSG);
+            if(!$this->checkDirectoryName($this->_getParam("name"))) {
+                Utils::addMsg(self::BADNAME_MSG, Utils::FAIL_MSG);
+            }else {
+                $ret = $this->updateDirectory($directory);
+                if ($ret['error'])
+                    Utils::addMsg($ret['error_msg'], Utils::FAIL_MSG);
+            }
         }
 
         $directoriesModel = new Directories();

@@ -70,6 +70,8 @@ EOT;
                     $this->error = true;
                     Utils::addMsg("Le mot de passe ne correspond pas",Utils::FAIL_MSG);
                 }else{
+                    session_destroy();
+                    session_start();
                     // redirect to file upload
                     $_SESSION['user'] = $user;
                     Utils::addMsg("Vous êtes désormais connecté en tant que $user->mail",Utils::SUCCESS_MSG);
@@ -83,6 +85,7 @@ EOT;
 
     public function logoutAction(){
         unset($_SESSION['user']);
+        session_destroy();
         header('Location:http://'.$_SERVER['HTTP_HOST'].Utils::getConf()['security']['urllogin']);
         die();
     }

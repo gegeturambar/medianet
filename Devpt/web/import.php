@@ -76,6 +76,20 @@ function copyDirectory($item, $path_source, $path_dest,$parent_id = 1)
 
     $directoryModel   = new Directories();
 
+    $corresp = array(
+        "exe"	=>  "application/octet-stream",
+        "html"  =>  "text/html",
+        "flv"   =>  "video/flv",
+        "jpg"   =>  "image/jpeg",
+        "jpeg"  =>  "image/jpeg",
+        "mp3"   =>  "audio/mpeg3",
+        "mp4"   =>  "audio/mpeg4",
+        "pdf"   =>  "application/pdf",
+        "pps"   =>  "application/mspowerpoint",
+        "ppt"   =>  "application/mspowerpoint",
+        "swf"   =>  "application/x-shockwave-flash"
+    );
+
     foreach ($items as $item) {
         if($item == '.' || $item == '..')
             continue;
@@ -87,11 +101,29 @@ function copyDirectory($item, $path_source, $path_dest,$parent_id = 1)
                 mkdir($path_dest . DIRECTORY_SEPARATOR . $item);
             }
 
+
             // add directory to bdd if not exists
             $directory = $directoryModel->fetchOneByNameAndParent($item, $parent_id);
             if(!$directory){
                 //create
-                $newParentId = $directoryModel->save(array('name'=>$item,'parentid'=>$parent_id, "path" => $path_dest . DIRECTORY_SEPARATOR . $item));
+
+                if($parent_id == 1) {
+                    $access = in_array(strtolower($item), array("exe", "lettre22", "lettre23")) ? "ADMIN" : "USER";
+                    $exts = Utils::getConf()['import']['extensions'];
+                    $extensions = array();
+                    foreach ($corresp as $key => $val) {
+                        if (strpos(strtolower($item), $key) !== false) {
+                            $extensions[] = $val;
+                        }
+                    }
+                    $extensions = implode(",",$extensions);
+                }else{
+                    // take from parentid
+                    $dad = $directoryModel->fetchOne($parent_id);
+                    $extensions = $dad->extensions;
+                    $access = $dad->access;
+                }
+                $newParentId = $directoryModel->save(array('name'=>$item,'parentid'=>$parent_id, "path" => $path_dest . DIRECTORY_SEPARATOR . $item,"access"=>$access,"extensions"=>$extensions));
             }else{
                 $newParentId = $directory->id;
             }
